@@ -13,7 +13,7 @@ const messegeSchema = new mongoose.Schema({
     },
     messege:{
         type: String,
-        required: true,
+        required: [true, 'Path `messege` is required'],
     }
 }, {timestamps: true})
 

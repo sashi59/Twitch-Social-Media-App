@@ -1,69 +1,66 @@
+// import Message from "../../frontend/src/pages/messege/messegeContainer/Message.jsx";
 import Conversation from "../model/conversation.model.js";
 import Messege from "../model/messege.model.js";
 
 export const getMesseges = async (req, res) => {
     try {
-        const { id:receiverId } = req.params;
+        const { id: receiverId } = req.params;
         const senderId = req.user._id;
+        console.log("Sender ID:", senderId); // Debugging
+        console.log("Receiver ID:", receiverId); // Debugging
         const conversation = await Conversation.findOne({
-            participants:{
+            participants: {
                 $all: [senderId, receiverId],
             }
         }).populate("messeges")
 
-        if(!conversation){
-            return res.status(200).json([]);
+        if (!conversation) {
+            const conversation = await Conversation.create({
+                participants: [senderId, receiverId],
+            })
+            return res.status(200).json({conversation});
         }
 
-        const messages =  conversation.messeges;
+        const messages = conversation.messeges;
+        console.log("Messages: ::", messages);
         return res.status(200).json(messages);
-        
+
         //hello
     } catch (error) {
-       console.log("Error in getMesseges", error);
-       return res.status(500).json({ error: "Internal Server Error" }); 
+        console.log("Error in getMesseges", error.message);
+        return res.status(500).json({ error: "Internal Server Error" });
     }
 }
 
 export const sendMesseges = async (req, res) => {
     try {
-        const { id: receiverId } = req.params;
-        const senderId = req.user._id;
         const { messege } = req.body;
+		const { id: receiverId } = req.params;
+		const senderId = req.user._id;
 
-        let conversation = await Conversation.findOne({
-            participants: {
-                $all: [senderId, receiverId],
-            }
-        }).populate("messeges");
+		let conversation = await Conversation.findOne({
+			participants: { $all: [senderId, receiverId] },
+		});
 
-        if (!conversation) {
-            conversation = new Conversation({
-                participants: [senderId, receiverId],
-            });
-        }
+		if (!conversation) {
+			conversation = await Conversation.create({
+				participants: [senderId, receiverId],
+			});
+		}
 
-        const newMessege = await Messege.create({
-            senderId,
-            receiverId,
-            messege,
-        })
+		const newMessage = await  Messege.create({
+			senderId,
+			receiverId,
+			messege,
+		});
 
-        if (newMessege) {
-            conversation.messeges.push(newMessege._id);
-        }
-        await Promise.all([
-            await conversation.save(),
-            await newMessege.save(),
-
-        ])
-
-        return res.status(201).json(newMessege);
-
+		if (newMessage) {
+			conversation.messeges.push(newMessage._id);
+		}
+        await Promise.all([conversation.save(), newMessage.save()]);
+        res.status(201).json(newMessage);
     } catch (error) {
-        console.log("Error in sending messege", error);
-        return res.status(500).json({ error: "Internal Server Error" });
+        console.error("Error in sending message", error);
+        res.status(500).json({ error: "Internal Server Error" });
     }
-
-
-}
+};

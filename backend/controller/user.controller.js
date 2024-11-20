@@ -147,3 +147,21 @@ export const updateUserProfile = async (req, res) => {
     }
 
 }
+
+export const getUserForChat = async (req, res)=>{
+
+    try {
+
+        //get following user
+        const followingUser = req.user.following;
+        
+        const filterUser = await User.find({_id:{$in:followingUser}}).select("-password")
+        
+
+        return res.status(200).json(filterUser);
+    } catch (error) {
+        console.log("Error in getUserForChat: ", error.message);
+        res.status(500).json( "Internal Server Error");
+        
+    }
+}

@@ -38,7 +38,8 @@ const SignUpPage = () => {
       }
     },
     onSuccess: () => {
-      toast.success("Account created successfully!\nNow Login...");
+      toast.success("Account created successfully!");
+      <Link to="/login"/>
     },
   });
 

@@ -222,7 +222,7 @@ const ProfilePage = () => {
 										<span className='text-slate-500 text-xs'>Following</span>
 									</div>
 									<div className='flex gap-1 items-center'>
-										<span className='font-bold text-xs'>{user?.followers?.length || 0}</span>
+										<span className='font-bold text-xs'>{user?.follower?.length || 0}</span>
 										<span className='text-slate-500 text-xs'>Followers</span>
 									</div>
 								</div>
