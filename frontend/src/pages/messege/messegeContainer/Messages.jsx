@@ -4,11 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 // import useConversation from "../../../zustand/useConversation";
 import useGetMessages from "../../../hooks/useGetMessege";
 import ChatSkeleton from "../../../components/skeletons/ChatSkeleton";
+import useListenMessages from "../../../hooks/useListenMessages";
 
 const Messages = () => {
 	const { messeges, loading } = useGetMessages();
-	console.log("messages: ", messeges)
-	// useListenMessages();
+	useListenMessages();
 	const lastMessageRef = useRef();
 
 	useEffect(() => {

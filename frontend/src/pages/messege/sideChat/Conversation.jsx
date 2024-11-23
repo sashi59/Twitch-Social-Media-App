@@ -1,12 +1,15 @@
 import React from 'react'
 import {getRandomEmoji} from "../../../utils/emojis/emoji"
 import useConversation from '../../../zustand/useConversation'
+import { useSocketContext } from '../../../context/SocketContext'
 
 const Conversation = ({user}) => {
 
 	const {selectedConversation, setSelectedConversation} = useConversation();
 
 	const isSelected = selectedConversation?._id === user._id;
+	const {onlineUsers} = useSocketContext();
+	const isOnline = onlineUsers.includes(user._id);
 
 	const handleSelectedConversation = () => {
         console.log("Setting selected conversation:");
@@ -17,7 +20,7 @@ const Conversation = ({user}) => {
  			<div className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-0.9 cursor-pointer ${isSelected ? "bg-sky-500" : ""}`}
 				onClick={handleSelectedConversation}
 			>
- 				<div className='avatar online'>
+ 				<div className={`avatar ${isOnline ? "online" : ""}`}>
  					<div className='w-12 rounded-full'>
 						<img
  							src={user?.profileImg ||'/avatar-placeholder.png'}

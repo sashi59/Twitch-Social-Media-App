@@ -11,6 +11,7 @@ import userRouter from "./routes/user.route.js"
 import postRouter from  "./routes/post.Route.js"
 import notificationRouter from  "./routes/notification.Route.js"
 import messegeRouter from "./routes/messege.route.js"
+import { app , server} from "./socket/socket.js";
 
 dotenv.config();
 
@@ -20,7 +21,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
  });
 
-const app = express();
+// const app = express();
 const PORT = process.env.PORT||  9000;
 const __dirname = path.resolve();
 
@@ -59,7 +60,7 @@ app.get("/", (req, res) => {
 
 
 
-app.listen(PORT, console.log(`Server Started at PORT: ${PORT}`));
+server.listen(PORT, console.log(`Server Started at PORT: ${PORT}`));
 
 
 // console.log("Error in x", error.messege)
