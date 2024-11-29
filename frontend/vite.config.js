@@ -9,7 +9,7 @@ export default defineConfig({
     port: 3000,
     proxy:{
       "/api":{
-        target:"http://localhost:9000",
+        target:"https://twitch-social-media-app.onrender.com"|| "http://localhost:9000",
         changeOrigin:true,
       }
     }

@@ -14,9 +14,11 @@ export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState(null);
 
+  const BACKEND_URL = "https://twitch-social-media-app.onrender.com" || "http://localhost:9000";
+
   useEffect(() => {
     if (authUser) {
-      const newSocket = io("http://localhost:9000", {
+      const newSocket = io(BACKEND_URL, {
         query: {
           userId: authUser._id,
         },
